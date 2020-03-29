@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  assets-manager:
+    build: ./AssetsManager
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8000:80"
+  dbs:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Senha123_45
+      - MSSQL_PID=Developer
+    ports:
+      - "14333:1433"
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:3.8'
+    environment:
+      - RABBITMQ_PASSWORD=admin
+    ports:
+      - '4369:4369'
+      - '5672:5672'
+      - '25672:25672'
+      - '15672:15672'
+    volumes:
+      - 'rabbitmq_data:/bitnami'
+
+volumes:
+  rabbitmq_data:
+    driver: local
